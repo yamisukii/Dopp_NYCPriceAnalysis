@@ -29,11 +29,27 @@ def drop_unnecessary (df):
                                   'VIC_SEX', 'RPT_DT', 'CMPLNT_TO_DT'])
     return df
 
+def drop_unnecessary_shootings(df):
+    '''
+    - INCIDENT_KEY/OCCUR_TIME not relevant
+    - BORO/LOC_OF_OCCUR_DESC/PRECINCT/JURISDICTION_CODE/LOC_CLASSFCTN_DESC/LOCATION_DESC location only via coordinates
+    - PERP_AGE_GROUP/PERP_SEX/PERP_RACE/VIC_AGE_GROUP/VIC_SEX/VIC_RACE not relevant as we will be aggregating the number of shootings later
+    '''
+    df = df.drop(columns=
+                 ['OCCUR_TIME', 'INCIDENT_KEY', 'LOC_OF_OCCUR_DESC', 'BORO', 'LOCATION_DESC', 'LOC_CLASSFCTN_DESC',
+                  'JURISDICTION_CODE', 'PRECINCT', 'PERP_AGE_GROUP', 'PERP_SEX', 'PERP_RACE', 'VIC_AGE_GROUP', 'VIC_RACE','VIC_SEX'])
+    return df
+
 def type_date_columns (df):
     column_names = list(df.columns)
     for column in column_names:
-        if column.endswith('DT'):
+        if column.endswith('DT') or column.endswith('DATE'):
             df[column] = pd.to_datetime(df[column], errors='coerce', format='%m/%d/%Y')
+    return df
+
+def drop_na_location (df, column_names):
+    for col in column_names:
+        df = df.dropna(subset=[col])
     return df
 
 def occurences_per_date_column (df, column_name):
@@ -118,7 +134,7 @@ def handle_police_data (file_path, beginning_year):
     nan_count_per_column = df.isna().sum()
     print(nan_count_per_column)
     # first we drop all columns without GPS Data as they are useless for us:
-    df = df.dropna(subset=['Latitude'])
+    df = drop_na_location(df, ['Latitude', 'Longitude', 'Lat_Lon', 'New Georeferenced Column'])
     # As PD_CD has a lot of NaN values we drop it
     df = df.drop('PD_CD', axis = 1)
     #nan_count_per_column = df.isna().sum()
@@ -128,6 +144,24 @@ def handle_police_data (file_path, beginning_year):
     print(df.info())
     return df
 
+def handle_shooting_data (path, beginning_year):
+    (pd.set_option('display.max_columns', None))
+    df = import_data(path)
+    df = type_date_columns(df)
+    df = drop_unnecessary_shootings(df)
+    df = drop_na_location(df, ['X_COORD_CD', 'Y_COORD_CD', 'Latitude', 'Longitude', 'New Georeferenced Column'])
 
+    #nan_count_per_column = df.isna().sum()
+    #print(nan_count_per_column)
+
+    print(df.head())
+    print(df.info())
+    return df
+
+# For police data
 #file_path = 'police_data/NYPD_Complaint_Data_Current__Year_To_Date__20241223.csv'
 #df = handle_police_data(file_path, 2022)
+
+#For shootings data:
+#file_path = 'shootings/NYPD_Shooting_Incident_Data__Year_To_Date__20241227.csv'
+#df = handle_shooting_data(file_path, 2022)
