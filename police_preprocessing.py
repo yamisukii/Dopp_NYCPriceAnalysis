@@ -18,6 +18,7 @@ def drop_unnecessary (df):
     - PARKS_NM park name not relevant since coordinates are used for locations
     - CMPLNT_FR_TM/CMPLNT_TO_TM date is enough for our purposes
     - HOUSING_PSA/PATROL_BORO/SUSP_AGE_GROUP/SUSP_SEX/SUSP_RACE/VIC_AGE_GROUP/VIC_RACE/VIC_SEX are not relevant
+    - RPT_DT/CMPLNT_TO_DT as we are only interested on when the crime was taken place not when it was reported/finished
     (((- KY_CD not usable as no description provided and no decent mapping was found)))
     '''
     df = df.drop(columns=
@@ -25,7 +26,7 @@ def drop_unnecessary (df):
                                   'CMPLNT_NUM', 'PREM_TYP_DESC', 'BORO_NM', 'PARKS_NM', 'CMPLNT_TO_TM', 'CMPLNT_FR_TM',
                                   'ADDR_PCT_CD', 'HOUSING_PSA','JURISDICTION_CODE', 'PATROL_BORO', 'STATION_NAME',
                                   'SUSP_AGE_GROUP', 'SUSP_RACE', 'SUSP_SEX', 'TRANSIT_DISTRICT', 'VIC_AGE_GROUP', 'VIC_RACE',
-                                  'VIC_SEX'])
+                                  'VIC_SEX', 'RPT_DT', 'CMPLNT_TO_DT'])
     return df
 
 def type_date_columns (df):
@@ -79,33 +80,54 @@ def id_off (df, column_name_one, column_name_two):
     print(f'Number of unique {column_name_one} values: {num_unique_kcd}')
     print(f'Number of unique {column_name_two} values: {num_unique_ofns_desc}')
 
+def limit_date_range (df, column_name, year):
+    df[column_name] = pd.to_datetime(df[column_name], errors='coerce')
 
-(pd.set_option('display.max_columns', None))
+    df_filtered = df[df[column_name].dt.year >= year]
 
-file_path = 'police_data/NYPD_Complaint_Data_Current__Year_To_Date__20241223.csv'
+    return df_filtered
 
-df = import_data(file_path)
-df = drop_unnecessary(df)
-df = type_date_columns(df)
+# file_path: path to csv
+# beginning_year: year that should start being taken to account for analysis
+def handle_police_data (file_path, beginning_year):
+    (pd.set_option('display.max_columns', None))
+
+    df = import_data(file_path)
+    df = drop_unnecessary(df)
+    df = type_date_columns(df)
+
+    #occurences_per_date_column(df, 'CMPLNT_FR_DT')
+
+    #count_unique_values(df, 'OFNS_DESC')
+    # looking at this graph this seems to be the most relevant predictor (later it would be wise to analyze if KY_CD and LAW_CAT_CD are needed)
+    #count_unique_values(df, 'KY_CD')
+    # I suspect that KY_CD is the id of OFNS_DESC and therefore we would only need one; we check it:
+    #id_off(df, 'KY_CD', 'OFNS_DESC')
+    # As we can see by the results this is not the case
+    # As I do not find a good description for KY_CD I will drop it as it does not convey information in this state
+    df = df.drop('KY_CD', axis = 1)
+
+    #count_unique_values(df, 'PD_CD')
+    #count_unique_values(df, 'PD_DESC')
+    # PD_CD and PD_DESC should be kept for now and will be looked at later for the machine learning model
+
+    df = limit_date_range(df, "CMPLNT_FR_DT", beginning_year)
+    #occurences_per_date_column(df, 'CMPLNT_FR_DT')
+
+    #now lets take a look at NaN values
+    nan_count_per_column = df.isna().sum()
+    print(nan_count_per_column)
+    # first we drop all columns without GPS Data as they are useless for us:
+    df = df.dropna(subset=['Latitude'])
+    # As PD_CD has a lot of NaN values we drop it
+    df = df.drop('PD_CD', axis = 1)
+    #nan_count_per_column = df.isna().sum()
+    #print(nan_count_per_column)
+
+    print(df.head())
+    print(df.info())
+    return df
 
 
-#occurences_per_date_column(df, 'CMPLNT_FR_DT')
-#occurences_per_date_column(df, 'CMPLNT_TO_DT')
-#occurences_per_date_column(df, 'RPT_DT')
-
-#count_unique_values(df, 'OFNS_DESC')
-# looking at this graph this seems to be the most relevant predictor (later it would be wise to analyze if KY_CD and LAW_CAT_CD are needed)
-#count_unique_values(df, 'KY_CD')
-# I suspect that KY_CD is the id of OFNS_DESC and therefore we would only need one; we check it:
-#id_off(df, 'KY_CD', 'OFNS_DESC')
-# As we can see by the results this is not the case
-# As I do not find a good description for KY_CD I will drop it as it does not convey information in this state
-df = df.drop('KY_CD', axis = 1)
-
-#count_unique_values(df, 'PD_CD')
-#count_unique_values(df, 'PD_DESC')
-# PD_CD and PD_DESC should be kept for now and will be looked at later for the machine learnign model
-
-
-print(df.head())
-print(df.info())
+#file_path = 'police_data/NYPD_Complaint_Data_Current__Year_To_Date__20241223.csv'
+#df = handle_police_data(file_path, 2022)
