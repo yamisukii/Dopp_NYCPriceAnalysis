@@ -32,18 +32,19 @@ def drop_unnecessary (df):
 def drop_unnecessary_shootings(df):
     '''
     - INCIDENT_KEY/OCCUR_TIME not relevant
-    - BORO/LOC_OF_OCCUR_DESC/PRECINCT/JURISDICTION_CODE/LOC_CLASSFCTN_DESC/LOCATION_DESC location only via coordinates
+    - BORO/LOC_OF_OCCUR_DESC/PRECINCT/JURISDICTION_CODE/LOC_CLASSFCTN_DESC/LOCATION_DESC/x_coord_cd/y_coord_cd location only via coordinates
     - PERP_AGE_GROUP/PERP_SEX/PERP_RACE/VIC_AGE_GROUP/VIC_SEX/VIC_RACE not relevant as we will be aggregating the number of shootings later
     '''
     df = df.drop(columns=
-                 ['OCCUR_TIME', 'INCIDENT_KEY', 'LOC_OF_OCCUR_DESC', 'BORO', 'LOCATION_DESC', 'LOC_CLASSFCTN_DESC',
-                  'JURISDICTION_CODE', 'PRECINCT', 'PERP_AGE_GROUP', 'PERP_SEX', 'PERP_RACE', 'VIC_AGE_GROUP', 'VIC_RACE','VIC_SEX'])
+                 ['occur_time', 'incident_key', 'loc_of_occur_desc', 'boro', 'location_desc', 'loc_classfctn_desc',
+                  'jurisdiction_code', 'precinct', 'perp_age_group', 'perp_sex', 'perp_race', 'vic_age_group', 'vic_race','vic_sex',
+                  'x_coord_cd', 'y_coord_cd'])
     return df
 
 def type_date_columns (df):
     column_names = list(df.columns)
     for column in column_names:
-        if column.endswith('DT') or column.endswith('DATE'):
+        if column.endswith('DT') or column.endswith('DATE') or column.endswith('date'):
             df[column] = pd.to_datetime(df[column], errors='coerce', format='%m/%d/%Y')
     return df
 
@@ -149,7 +150,7 @@ def handle_shooting_data (path, beginning_year):
     df = import_data(path)
     df = type_date_columns(df)
     df = drop_unnecessary_shootings(df)
-    df = drop_na_location(df, ['X_COORD_CD', 'Y_COORD_CD', 'Latitude', 'Longitude', 'New Georeferenced Column'])
+    df = drop_na_location(df, ['latitude', 'longitude', 'geocoded_column'])
 
     #nan_count_per_column = df.isna().sum()
     #print(nan_count_per_column)
@@ -163,5 +164,5 @@ def handle_shooting_data (path, beginning_year):
 #df = handle_police_data(file_path, 2022)
 
 #For shootings data:
-#file_path = 'shootings/NYPD_Shooting_Incident_Data__Year_To_Date__20241227.csv'
+#file_path = 'https://data.cityofnewyork.us/resource/5ucz-vwe8.csv'
 #df = handle_shooting_data(file_path, 2022)
