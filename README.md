@@ -5,4 +5,5 @@ Individual csv files can be placed in data folder. Airbnb files are compressed a
 
 ## AirBnb Data:
 
-Fetched the respective datasets of listings and reviews, merged them into two separate datasets. Listings should be enough primarily and if not, we can use reviews (Has reviews for listings in textual format, huge dataset)
+Run the script "airbnb_data_fetch.py" (python run airbnb_data_fetch.py)
+Run the notebook airbnb_preprocessing to obtain the cleaned and test dataset (Stored in data folder after execution)
