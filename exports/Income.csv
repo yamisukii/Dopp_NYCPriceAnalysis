@@ -1,63 +1,63 @@
-Location,Avg_Yearly_Income_Above_2012
-Riverdale,63444.125
-Williamsbridge,57027.125
-Throgs Neck,61644.875
-Pelham Parkway,54912.375
-Morrisania,25512.625
-East Tremont,25593.75
-Bedford Park,37856.75
-University Heights,30206.875
-Concourse/Highbridge,33750.625
-Unionport/Soundview,41962.25
-Mott Haven,25443.25
-Hunts Point,24413.5
-Washington Heights,53991.875
-Manhattanville,56551.25
-Central Harlem,49651.875
-East Harlem,35999.125
-Upper East Side,130170.0
-Upper West Side,123951.5
-Chelsea/Clinton,107489.0
-Midtown Business District,103625.625
-Murray Hill/Stuyvesant,128804.625
-Lower East Side,46643.375
-Battery Park/Tribeca,138851.0
-Greenwich Village,142277.5
-Tottenville,99470.375
-South Beach,85636.25
-St. George,70948.5
-Williamsburg/Greenpoint,81438.625
-Bushwick,56174.25
-Bedford Stuyvesant,53862.625
-Fort Greene/Brooklyn Hts,103707.25
-Park Slope,133599.125
-Crown Heights North,61308.375
-Brownsville,31497.75
-East New York,43220.75
-Canarsie,78585.875
-East Flatbush,56255.125
-Crown Heights South,57748.625
-Sunset Park,59227.75
-Bay Ridge,72838.0
-Borough Park,51623.875
-Flatbush/Midwood,59952.125
-Sheepshead Bay,65099.625
-Bensonhurst,56584.875
-Coney Island,40396.0
-Astoria,69250.375
-Jackson Heights,61854.5
-Flushing,57595.5
-Bayside,87795.0
-Queens Village,92611.375
-Fresh Meadows/Briarwood,70832.875
-Elmhurst/Corona,55911.75
-Rego Park/Forest Hills,81084.5
-Sunnyside/Woodside,73291.125
-Ridgewood/Glendale,74584.0
-Woodhaven,73822.125
-Jamaica/St. Albans,65399.5
-Howard Beach,78508.125
-The Rockaways,55485.5
+boro_cd,Avg_Yearly_Income_Above_2012
+208,63444.125
+212,57027.125
+210,61644.875
+211,54912.375
+203,25512.625
+206,25593.75
+207,37856.75
+205,30206.875
+204,33750.625
+209,41962.25
+201,25443.25
+202,24413.5
+112,53991.875
+109,56551.25
+110,49651.875
+111,35999.125
+108,130170.0
+107,123951.5
+104,107489.0
+105,103625.625
+106,128804.625
+103,46643.375
+101,138851.0
+102,142277.5
+503,99470.375
+502,85636.25
+501,70948.5
+301,81438.625
+304,56174.25
+303,53862.625
+302,103707.25
+306,133599.125
+308,61308.375
+316,31497.75
+305,43220.75
+318,78585.875
+317,56255.125
+309,57748.625
+307,59227.75
+310,72838.0
+312,51623.875
+314,59952.125
+315,65099.625
+311,56584.875
+313,40396.0
+401,69250.375
+403,61854.5
+407,57595.5
+411,87795.0
+413,92611.375
+408,70832.875
+404,55911.75
+406,81084.5
+402,73291.125
+405,74584.0
+409,73822.125
+412,65399.5
+410,78508.125
+414,55485.5
 Bronx,40612.0
 Brooklyn,61479.0
 Manhattan,88101.625
