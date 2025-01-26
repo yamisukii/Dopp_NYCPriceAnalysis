@@ -1,4 +1,8 @@
 # police_data/NYPD_Complaint_Data_Current__Year_To_Date__20241223.csv filter=lfs diff=lfs merge=lfs -text
 # shootings/NYPD_Shooting_Incident_Data__Year_To_Date__20241227.csv filter=lfs diff=lfs merge=lfs -text
 *.csv filter=lfs diff=lfs merge=lfs -text
+<<<<<<< HEAD
 *.zip filter=lfs diff=lfs merge=lfs -text
+=======
+*.zip filter=lfs diff=lfs merge=lfs -text
+>>>>>>> bbfbf23e481bdd478aa35b2b53fc6bd8d0d4113e
