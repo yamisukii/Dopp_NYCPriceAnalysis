@@ -5,3 +5,4 @@ exports/
 notebooks/preprocess/airbnb_preprocessing.ipynb
 notebooks/clusterig/crime_aggregated_resultsUNIQUE.csv
 notebooks/clusterig/poi_aggregated_resultsUNIQUE.csv
+.idea
